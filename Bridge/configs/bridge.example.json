@@ -1,0 +1,40 @@
+{
+  "server": {
+    "address": "127.0.0.1:9100",
+    "allowed_origins": ["https://ticketjs.com"]
+  },
+  "storage": {
+    "job_store_path": "./data/jobs.json"
+  },
+  "printers": [
+    {
+      "id": "printer-network-001",
+      "name": "Printer Net 001",
+      "transport": "network",
+      "default": true,
+      "capabilities": {
+        "paper_width_mm": 58,
+        "encodings": ["cp437", "cp850", "latin1"],
+        "job_tracking": true
+      },
+      "network": {
+        "address": "192.168.1.50:9100",
+        "timeout": "5s"
+      }
+    },
+    {
+      "id": "printer-usb-001",
+      "name": "Printer USB 001",
+      "transport": "usb",
+      "default": false,
+      "capabilities": {
+        "paper_width_mm": 80,
+        "encodings": ["cp437", "cp850", "latin1"],
+        "job_tracking": true
+      },
+      "usb": {
+        "queue": "EPSON_TM_T20III"
+      }
+    }
+  ]
+}
