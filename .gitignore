@@ -1,2 +1,5 @@
 .DS_Store
 Bridge/configs/bridge.local.json
+Bridge/bridge.local.json
+Bridge/data/jobs.json
+Bridge/thermalik-bridge

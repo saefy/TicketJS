@@ -1,15 +1,15 @@
 {
   "server": {
     "address": "127.0.0.1:9100",
-    "allowed_origins": ["https://ticketjs.com"]
+    "allowed_origins": ["https://thermalik.laravel.cloud"]
   },
   "storage": {
     "job_store_path": "./data/jobs.json"
   },
   "printers": [
     {
-      "id": "printer-network-001",
-      "name": "Printer Net 001",
+      "id": "caja-principal",
+      "name": "Caja principal",
       "transport": "network",
       "default": true,
       "capabilities": {
@@ -23,17 +23,19 @@
       }
     },
     {
-      "id": "printer-usb-001",
-      "name": "Printer USB 001",
+      "id": "caja-usb",
+      "name": "Caja USB",
       "transport": "usb",
       "default": false,
       "capabilities": {
-        "paper_width_mm": 80,
+        "paper_width_mm": 58,
         "encodings": ["cp437", "cp850", "latin1"],
         "job_tracking": true
       },
       "usb": {
-        "queue": "EPSON_TM_T20III"
+        "queue": "EPSON_TM_T20III",
+        "vendor_id": "04b8",
+        "product_id": "0e15"
       }
     }
   ]
