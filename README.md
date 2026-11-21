@@ -26,25 +26,23 @@ Windows (PowerShell, *Run as administrator*):
 iwr https://github.com/saefy/TicketJS/releases/latest/download/install-bridge.ps1 -useb | iex
 ```
 
-The installers verify the SHA-256 checksum of the download. Then configure your
-printer, the web origin that will print and your API key:
+The installers verify the SHA-256 checksum of the download. Then install the
+service and configure it in the browser (on Windows, from an Administrator PowerShell):
 
 ```bash
-thermalik-bridge setup
+thermalik-bridge install
 ```
+
+It starts the Bridge as a system service and opens its local admin page
+(`http://127.0.0.1:9100/admin/`). There, add your printer, allow the web origin
+that will print, activate with your API key and print a test page. Open the page
+again any time with `thermalik-bridge config`; changes apply without a restart.
+The page only answers on this computer; web pages cannot use it.
 
 Get an API key and a license at [ticketjs.com](https://ticketjs.com) (*API Keys* and *Installations*).
 
-## Manage it from the browser
-
-```bash
-thermalik-bridge config
-```
-
-Opens the local admin page (`http://127.0.0.1:9100/admin/`), already signed in.
-Add or edit printers, allow web origins, activate with an API key, print a test
-page and see recent jobs. **Save and apply** reloads the Bridge without a restart.
-The page only answers on this computer; web pages cannot use it.
+**Advanced:** to configure from the terminal instead (no browser, scripted
+installs), run the wizard `thermalik-bridge setup`.
 
 ## Print from your page
 
