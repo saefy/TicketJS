@@ -35,6 +35,17 @@ thermalik-bridge setup
 
 Get an API key and a license at [ticketjs.com](https://ticketjs.com) (*API Keys* and *Installations*).
 
+## Manage it from the browser
+
+```bash
+thermalik-bridge config
+```
+
+Opens the local admin page (`http://127.0.0.1:9100/admin/`), already signed in.
+Add or edit printers, allow web origins, activate with an API key, print a test
+page and see recent jobs. **Save and apply** reloads the Bridge without a restart.
+The page only answers on this computer; web pages cannot use it.
+
 ## Print from your page
 
 ```html
