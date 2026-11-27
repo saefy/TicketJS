@@ -1,0 +1,57 @@
+name: Publish npm package
+
+# Publishes @saefy/ticketjs to npm with Trusted Publishing (OIDC, no token).
+# The package is built and tested in the private repo saefy/thermalik, whose
+# "Publish SDK" workflow creates a release sdk-vX.Y.Z here with the package
+# tarball attached (never marked as the latest release, so the Bridge
+# installers under releases/latest keep working). This workflow only
+# publishes that tarball.
+#
+# npmjs.com → @saefy/ticketjs → Settings → Trusted publishing: GitHub Actions,
+# organization "saefy", repository "TicketJS", workflow "publish-npm.yml".
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write # OIDC for npm Trusted Publishing and provenance
+
+jobs:
+  publish:
+    if: startsWith(github.event.release.tag_name, 'sdk-v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: npm 11.5.1 or later (needed for Trusted Publishing)
+        run: |
+          npm install -g npm@^11.5.1
+          npm --version
+
+      - name: Download the package from the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern 'saefy-ticketjs-*.tgz'
+          ls -l saefy-ticketjs-*.tgz
+
+      - name: Tarball matches the release tag
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          file=$(ls saefy-ticketjs-*.tgz)
+          name=$(tar -xOzf "$file" package/package.json | node -p "JSON.parse(require('fs').readFileSync(0)).name")
+          version=$(tar -xOzf "$file" package/package.json | node -p "JSON.parse(require('fs').readFileSync(0)).version")
+          test "$name" = "@saefy/ticketjs" || { echo "::error::Unexpected package $name"; exit 1; }
+          test "sdk-v$version" = "$TAG" || { echo "::error::Tarball version $version does not match tag $TAG"; exit 1; }
+          echo "PACKAGE_FILE=$file" >> "$GITHUB_ENV"
+
+      - name: Publish
+        run: npm publish "./$PACKAGE_FILE" --access public
